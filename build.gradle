@@ -1,0 +1,44 @@
+
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+  	classifier "sources"
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  from javadoc.destinationDir
+  classifier "javadoc"
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+        	groupId 'com.github.jajanjawa'
+            artifactId 'jnowdb'
+            version '0.2'
+        
+            from components.java
+
+            artifact sourceJar
+            artifact javadocJar
+        }
+    }
+}
+
+dependencies {
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.google.code.gson:gson:2.7'
+
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.slf4j:slf4j-api:1.7.21'
+    testCompile 'org.slf4j:slf4j-simple:1.7.21'
+}
