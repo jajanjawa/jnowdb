@@ -17,6 +17,7 @@ import static com.github.jajanjawa.jnowdb.NowDBProperty.TOKEN;
 public class NowDBURIBuilder {
 
 	public static final String SERVICE_URL = "http://io.nowdb.net/v2/";
+	public static final String SERVICE_URL_V1 = "http://io.nowdb.net/operation/";
 
 	private StringBuilder builder;
 	private StringBuilder fullUrl;

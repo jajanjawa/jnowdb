@@ -13,20 +13,34 @@ import static com.github.jajanjawa.jnowdb.NowDBProperty.WNOTIN_VALUE;
 
 public enum Operation {
 
-	INSERT("insert/"), REMOVE_ALL("remove_all/"), REMOVE_ID("remove_id/"),
+	COUNT_ALL("count_all/"),
+	COUNT_WHERE("count_where/"),
+	COUNT_BETWEEN("count_between/"),
+	INSERT("insert/"), 
+	REMOVE_ALL("remove_all/"), 
+	REMOVE_ID("remove_id/"),
 	REMOVE_WHERE("remove_where/"),
 	REMOVE_OR_WHERE("remove_or_where/"),
 	REMOVE_WHERE_LIKE("remove_where_like/"),
 	REMOVE_WHERE_IN("remove_where_in/"),
 	REMOVE_WHERE_NOT_IN("remove_where_not_in"),
-	SELECT_ALL("select_all/"), SELECT_ID(
-			"select_id/"), SELECT_WHERE("select_where/"), SELECT_OR_WHERE("select_or_where/"), SELECT_WHERE_LIKE(
-					"select_where_like/"), SELECT_WHERE_IN("select_where_in/"), SELECT_WHERE_NOT_IN(
-							"select_where_not_in/"), UPDATE_ALL("update_all/"), UPDATE_ID("update_id/"),
+	SELECT_ALL("select_all/"), 
+	SELECT_ID("select_id/"), 
+	SELECT_WHERE("select_where/"), 
+	SELECT_OR_WHERE("select_or_where/"), 
+	SELECT_WHERE_LIKE("select_where_like/"), 
+	SELECT_WHERE_IN("select_where_in/"), 
+	SELECT_WHERE_NOT_IN("select_where_not_in/"), 
+	UPDATE_ALL("update_all/"), 
+	UPDATE_ID("update_id/"),
 	/**
 	* Operasi untuk pengguna yang memanggil {@link NowDBQuery#and()} 
 	*/
-	UPDATE_WHERE("update_where/"), UPDATE_OR_WHERE("update_or_where/"), UPDATE_WHERE_LIKE("update_where_like/"), UPDATE_WHERE_IN("update_where_in/"), UPDATE_WHERE_NOT_IN("update_where_not_in/"),;
+	UPDATE_WHERE("update_where/"), 
+	UPDATE_OR_WHERE("update_or_where/"), 
+	UPDATE_WHERE_LIKE("update_where_like/"), 
+	UPDATE_WHERE_IN("update_where_in/"), 
+	UPDATE_WHERE_NOT_IN("update_where_not_in/"),;
 
 	private final String operation;
 

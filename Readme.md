@@ -13,7 +13,10 @@ repositories {
 	}
 }
 dependencies {
-	compile 'com.github.jajanjawa:jnowdb:0.2'
+	compile 'com.github.JajanJawa:jNowDB:0.2'
+	
+	// atau
+	//compile 'com.github.JajanJawa:jNowDB:-SNAPSHOT'
 }
 ```
 

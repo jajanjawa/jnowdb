@@ -23,6 +23,7 @@ import okhttp3.CacheControl;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.FormBody.Builder;
 
 public class NowDB {
 
@@ -63,7 +64,7 @@ public class NowDB {
 			return this;
 		}
 	}
-	
+
 	private static Gson gson;
 
 	private static OkHttpClient httpClient;
@@ -71,9 +72,11 @@ public class NowDB {
 	public static Gson getGson() {
 		return gson;
 	}
+
 	public static OkHttpClient getHttpClient() {
 		return httpClient;
 	}
+
 	/**
 	 * Membuat request builder dengan setelan cache control.
 	 *
@@ -83,6 +86,7 @@ public class NowDB {
 		CacheControl cacheControl = new CacheControl.Builder().noCache().build();
 		return new Request.Builder().cacheControl(cacheControl);
 	}
+
 	private NowDBConfig config;
 
 	private ObjectMapper mapper;
@@ -108,7 +112,7 @@ public class NowDB {
 		Map<String, Object> map = convert(data);
 		return ObjectMapper.addAll(builder, map).build();
 	}
-	
+
 	/**
 	 * Konversi {@link NowDBCollection} menjadi Map. setelan token, project dan
 	 * app id ditambahkan ke dalam map.
@@ -125,40 +129,43 @@ public class NowDB {
 		map.put(APP_ID, config.appId);
 		return map;
 	}
-	
+
 	public NowDBCall delete(NowDBQuery query) {
 		String url = NowDBURI.delete(query, config);
 		Request request = requestBuilder().url(url).delete().build();
-		
+
 		return new NowDBCall(httpClient.newCall(request));
 	}
-	
+
 	/**
 	 * Hapus semua data pada koleksi ini.
+	 * 
 	 * @param collection
 	 * @return
 	 */
 	public NowDBCall delete(String collection) {
 		String url = NowDBURI.removeAll(collection, config);
 		Request request = requestBuilder().url(url).delete().build();
-		
+
 		return new NowDBCall(httpClient.newCall(request));
 	}
 
 	/**
-	 * @param collection nama koleksi
-	 * @param id 
+	 * @param collection
+	 *            nama koleksi
+	 * @param id
 	 * @return
 	 */
 	public NowDBCall delete(String collection, String id) {
 		String url = NowDBURI.removeId(id, collection, config);
 		Request request = requestBuilder().url(url).delete().build();
-		
+
 		return new NowDBCall(httpClient.newCall(request));
 	}
 
 	/**
 	 * Mendapatkan data.
+	 * 
 	 * @param query
 	 * @return
 	 */
@@ -167,9 +174,10 @@ public class NowDB {
 		Request request = requestBuilder().url(url).get().build();
 		return new NowDBCall(httpClient.newCall(request));
 	}
-	
+
 	/**
 	 * Mendapatkan beberapa entry dalam koleksi.
+	 * 
 	 * @param collection
 	 * @param offset
 	 * @param limit
@@ -180,9 +188,10 @@ public class NowDB {
 		Request request = requestBuilder().url(url).get().build();
 		return new NowDBCall(httpClient.newCall(request));
 	}
-	
+
 	/**
-	 * Mendapatkan koleksi. 
+	 * Mendapatkan koleksi.
+	 * 
 	 * @param collection
 	 * @param id
 	 * @return
@@ -193,13 +202,14 @@ public class NowDB {
 		Request request = requestBuilder().url(url).get().build();
 		return new NowDBCall(httpClient.newCall(request));
 	}
-	
+
 	public NowDBConfig getConfig() {
 		return config;
 	}
 
 	/**
 	 * Simpan koleksi baru pada server.
+	 * 
 	 * @param collection
 	 * @return
 	 * @throws IOException
@@ -211,7 +221,42 @@ public class NowDB {
 	}
 
 	/**
-	 * @param collection nama koleksi
+	 * Menghitung jumlah data pada koleksi.
+	 * 
+	 * @param collection
+	 *            nama koleksi
+	 * @return
+	 */
+	public NowDBCall countAll(String collection) {
+		FormBody body = new FormBody.Builder().add(TOKEN, config.token).add(APP_ID, config.appId)
+				.add(PROJECT, config.project).add(COLLECTION, collection).build();
+
+		String url = NowDBURIBuilder.SERVICE_URL_V1 + Operation.COUNT_ALL;
+		Request request = requestBuilder().url(url).post(body).build();
+		return new NowDBCall(httpClient.newCall(request));
+	}
+
+	/**
+	 * @param query
+	 * @return
+	 * @see NowDBQuery#equal(String, Object)
+	 */
+	public NowDBCall countWhere(NowDBQuery query) {
+		ClauseBuilder whereClause = query.getWhereClause();
+
+		FormBody body = new FormBody.Builder().add(TOKEN, config.token).add(APP_ID, config.appId)
+				.add(PROJECT, config.project).add(COLLECTION, query.getCollection())
+
+				.add(whereClause.getNameClause(), whereClause.getValueClause()).build();
+
+		String url = NowDBURIBuilder.SERVICE_URL_V1 + Operation.COUNT_WHERE;
+		Request request = requestBuilder().url(url).post(body).build();
+		return new NowDBCall(httpClient.newCall(request));
+	}
+
+	/**
+	 * @param collection
+	 *            nama koleksi
 	 * @param data
 	 * @return
 	 */
@@ -220,16 +265,18 @@ public class NowDB {
 		data.put(TOKEN, config.token);
 		data.put(PROJECT, config.project);
 		data.put(APP_ID, config.appId);
-		
+
 		FormBody body = ObjectMapper.addAll(new FormBody.Builder(), data).build();
 		Request request = requestBuilder().url(SERVICE_URL + INSERT).post(body).build();
-		
+
 		return new NowDBCall(httpClient.newCall(request));
 	}
 
 	/**
 	 * Memperbaruhi koleksi.
-	 * @param collection id harus sudah disetel.
+	 * 
+	 * @param collection
+	 *            id harus sudah disetel.
 	 * @return
 	 * @see NowDBCollection#setId(String)
 	 */
@@ -243,75 +290,82 @@ public class NowDB {
 	}
 
 	/**
-	 * @param query field yang dicari
-	 * @param data data baru
+	 * @param query
+	 *            field yang dicari
+	 * @param data
+	 *            data baru
 	 * @return
 	 */
 	public NowDBCall put(NowDBQuery query, Map<String, Object> data) {
 		FormBody.Builder builder = config.writeTo(new FormBody.Builder());
 		Operation operation = query.getConditionalSeparator().PUT();
-		
+
 		query.writeTo(builder);
-		
+
 		ClauseBuilder update = NowDBQuery.join(data, NowDBQuery.AND);
 		builder.add(UPDATE_FIELD, update.getNameClause());
 		builder.add(UPDATE_VALUE, update.getValueClause());
-		
+
 		Request request = requestBuilder().url(SERVICE_URL + operation).put(builder.build()).build();
 		return new NowDBCall(httpClient.newCall(request));
 	}
 
 	/**
 	 * Perbaruhi semua entry dalam koleksi dengan data yang diberikan.
-	 * @param collection nama koleksi
-	 * @param data 
+	 * 
+	 * @param collection
+	 *            nama koleksi
+	 * @param data
 	 * @return
 	 */
 	public NowDBCall put(String collection, Map<String, Object> data) {
 		FormBody.Builder builder = config.writeTo(new FormBody.Builder());
 		builder.add(COLLECTION, collection);
-		
+
 		ClauseBuilder join = NowDBQuery.join(data, NowDBQuery.AND);
 		builder.add(UPDATE_FIELD, join.getNameClause());
 		builder.add(UPDATE_VALUE, join.getValueClause());
-		
+
 		Request request = requestBuilder().url(SERVICE_URL + UPDATE_ALL).put(builder.build()).build();
 		return new NowDBCall(httpClient.newCall(request));
 	}
-	
+
 	/**
 	 * Memperbaruhi koleksi pada id yang diberikan.
+	 * 
 	 * @param collection
-	 * @param id didapat ketika melakukan POST.
-	 * @param data data baru
+	 * @param id
+	 *            didapat ketika melakukan POST.
+	 * @param data
+	 *            data baru
 	 * @return
 	 */
 	public NowDBCall put(String collection, String id, Map<String, Object> data) {
 		FormBody.Builder builder = config.writeTo(new FormBody.Builder());
 		builder.add(COLLECTION, collection);
 		builder.add(ID, id);
-		
+
 		FormBody body = ObjectMapper.addAll(builder, data).build();
-		
+
 		Request request = requestBuilder().url(SERVICE_URL + UPDATE_ID).put(body).build();
 		return new NowDBCall(httpClient.newCall(request));
 	}
-	
+
 	public NowDB setAppId(String appId) {
 		config.appId = appId;
 		return this;
 	}
-	
+
 	public NowDB setConfig(NowDBConfig config) {
 		this.config = config;
 		return this;
 	}
-	
+
 	public NowDB setProject(String project) {
 		config.project = project;
 		return this;
 	}
-	
+
 	public NowDB setToken(String token) {
 		config.token = token;
 		return this;

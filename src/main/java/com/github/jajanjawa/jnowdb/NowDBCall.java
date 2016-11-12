@@ -6,6 +6,11 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+/**
+ * 
+ * @author irwantoro
+ *
+ */
 public class NowDBCall {
 	
 	private Call call;
@@ -14,6 +19,11 @@ public class NowDBCall {
 		this.call = call;
 	}
 	
+	/**
+	 * Eksekusi dari {@link Thread} yang sama.
+	 * @return
+	 * @throws IOException
+	 */
 	public NowDBResponse execute() throws IOException {
 		NowDBResponse response = new NowDBResponse(call.execute());
 		
@@ -32,6 +42,10 @@ public class NowDBCall {
 		call.cancel();
 	}
 
+	/**
+	 * Eksekusi pada {@link Thread} yang lain.
+	 * @param responseCallback
+	 */
 	public void enqueue(NowDBCallback responseCallback) {
 		Callback callback = new Callback() {
 

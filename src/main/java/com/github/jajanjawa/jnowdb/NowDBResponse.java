@@ -1,10 +1,9 @@
 package com.github.jajanjawa.jnowdb;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.util.List;
 
-import org.slf4j.LoggerFactory;
+import com.google.gson.JsonObject;
 
 import okhttp3.Response;
 
@@ -20,7 +19,6 @@ public class NowDBResponse {
 		}
 		try {
 			json = response.body().string();
-			System.out.println(json);
 		} finally {
 			response.close();
 		}
@@ -46,22 +44,23 @@ public class NowDBResponse {
 		ListNowDBCollection<T> collection = new ListNowDBCollection<T>(listOfT);
 		return NowDB.getGson().fromJson(json, collection);
 	}
-
+	
 	/**
-	 * @param response
-	 * @param listOfT
-	 * @return
-	 * @throws IOException
+	 * Untuk konversi secara manual.
+	 * @return data asli dari server.
+	 * @see NowDB#getGson()
 	 */
-	@Deprecated
-	protected <T> List<T> list(Response response, Class<T> listOfT) throws IOException {
-		if (!response.isSuccessful()) {
-			throw new IOException(response.toString());
-		}
-		ListNowDBCollection<T> collection = new ListNowDBCollection<T>(listOfT);
-		try (Reader reader = response.body().charStream()) {
-			return NowDB.getGson().fromJson(reader, collection);
-		}
+	public String raw() {
+		return json;
+	}
+	
+	/**
+	 * Untuk operasi {@link NowDB#countAll(String)}
+	 * @return jumlah data dalam koleksi
+	 */
+	public int count() {
+		JsonObject object = NowDB.getGson().fromJson(json, JsonObject.class);
+		return object.get("total").getAsInt();
 	}
 
 	public Status status() throws IOException {
