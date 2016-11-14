@@ -37,13 +37,17 @@ public class NowDBURIBuilder {
 		return this;
 	}
 
-	public NowDBURIBuilder appId(String appId) {
-		builder.append(APP_ID).append('/');
-		builder.append(appId).append('/');
+	public NowDBURIBuilder append(String name, Object value) {
+		builder.append(name).append('/');
+		builder.append(value).append('/');
 
 		fullUrl.append(builder);
 		builder.setLength(0);
 		return this;
+	}
+
+	public NowDBURIBuilder appId(String appId) {
+		return append(APP_ID, appId);
 	}
 
 	/**
@@ -60,21 +64,7 @@ public class NowDBURIBuilder {
 	 * @return
 	 */
 	public NowDBURIBuilder collection(String collection) {
-		builder.append(COLLECTION).append('/');
-		builder.append(collection).append('/');
-
-		fullUrl.append(builder);
-		builder.setLength(0);
-		return this;
-	}
-
-	public NowDBURIBuilder append(String name, String value) {
-		builder.append(name).append('/');
-		builder.append(value).append('/');
-
-		fullUrl.append(builder);
-		builder.setLength(0);
-		return this;
+		return append(COLLECTION, collection);
 	}
 
 	/**
@@ -83,30 +73,15 @@ public class NowDBURIBuilder {
 	 * @return
 	 */
 	public NowDBURIBuilder id(String id) {
-		builder.append(ID).append('/');
-		builder.append(id).append('/');
-
-		fullUrl.append(builder);
-		builder.setLength(0);
-		return this;
+		return append(ID, id);
 	}
 
 	public NowDBURIBuilder limit(Integer limit) {
-		builder.append(LIMIT).append('/');
-		builder.append(limit).append('/');
-
-		fullUrl.append(builder);
-		builder.setLength(0);
-		return this;
+		return append(LIMIT, limit);
 	}
 
 	public NowDBURIBuilder offset(Integer offset) {
-		builder.append(OFFSET).append('/');
-		builder.append(offset).append('/');
-
-		fullUrl.append(builder);
-		builder.setLength(0);
-		return this;
+		return append(OFFSET, offset);
 	}
 
 	public NowDBURIBuilder operation(Operation operation) {
@@ -121,12 +96,7 @@ public class NowDBURIBuilder {
 	 * @return
 	 */
 	public NowDBURIBuilder project(String project) {
-		builder.append(PROJECT).append('/');
-		builder.append(project).append('/');
-
-		fullUrl.append(builder);
-		builder.setLength(0);
-		return this;
+		return append(PROJECT, project);
 	}
 
 	/**
@@ -140,11 +110,6 @@ public class NowDBURIBuilder {
 	}
 
 	public NowDBURIBuilder token(String token) {
-		builder.append(TOKEN).append('/');
-		builder.append(token).append('/');
-
-		fullUrl.append(builder);
-		builder.setLength(0);
-		return this;
+		return append(TOKEN, token);
 	}
 }
