@@ -5,7 +5,7 @@ Pustaka untuk layanan backend dari [nowdb.net](http://nowdb.net)
 ### Gradle
 tambahkan pada `build.gradle`
 ```groovy
-repositories {
+repositories { // pastikan bukan di dalam buildscript
 	jcenter()
 	mavenCentral()
 	maven {
@@ -13,7 +13,7 @@ repositories {
 	}
 }
 dependencies {
-	compile 'com.github.JajanJawa:jNowDB:0.2'
+	compile 'com.github.JajanJawa:jNowDB:0.3'
 	
 	// atau
 	//compile 'com.github.JajanJawa:jNowDB:-SNAPSHOT'

@@ -41,6 +41,7 @@ public class NowDBQuery {
 
 	/**
 	 * Separator untuk field yang keduanya digunakan untuk pencarian.
+	 * 
 	 * @return
 	 */
 	public NowDBQuery and() {
@@ -49,6 +50,9 @@ public class NowDBQuery {
 		return this;
 	}
 
+	/**
+	 * @return
+	 */
 	public NowDBQuery or() {
 		whereClause.append(OR, OR);
 
@@ -62,6 +66,7 @@ public class NowDBQuery {
 
 	/**
 	 * Akan mencari pada koleksi ini.
+	 * 
 	 * @param collection
 	 * @return
 	 */
@@ -97,15 +102,13 @@ public class NowDBQuery {
 	}
 
 	/**
-	 * isi dalam field mengandung kata dari value.
+	 * Operasi where like
 	 * 
 	 * @param name
 	 *            nama field
 	 * @param value
 	 *            kata yang dicari
 	 * @return
-	 * @see Operation#SELECT_WHERE_LIKE
-	 * @see Operation#UPDATE_WHERE_LIKE
 	 */
 	public NowDBQuery like(String name, Object value) {
 		whereClause.append(name, value);
@@ -113,7 +116,13 @@ public class NowDBQuery {
 		conditionalSeparator = ConditionalSeparator.LIKE;
 		return this;
 	}
-	
+
+	/**
+	 * Operasi where not in
+	 * @param name
+	 * @param values
+	 * @return
+	 */
 	public NowDBQuery out(String name, Object[] values) {
 		StringBuilder builder = new StringBuilder();
 		int index = 0;
@@ -130,11 +139,10 @@ public class NowDBQuery {
 	}
 
 	/**
+	 * Operasi where in
 	 * @param name
 	 * @param values
 	 * @return
-	 * @see Operation#SELECT_WHERE_IN
-	 * @see Operation#UPDATE_WHERE_IN
 	 */
 	public NowDBQuery in(String name, Object[] values) {
 		StringBuilder builder = new StringBuilder();
@@ -168,7 +176,7 @@ public class NowDBQuery {
 		this.offset = offset;
 		return this;
 	}
-	
+
 	/**
 	 * PUT
 	 * 
@@ -177,7 +185,7 @@ public class NowDBQuery {
 	 */
 	public FormBody.Builder writeTo(FormBody.Builder builder) {
 		builder.add(COLLECTION, collection);
-		
+
 		String[] keys = conditionalSeparator.PUT().keys();
 		builder.add(keys[0], whereClause.getNameClause());
 		builder.add(keys[1], whereClause.getValueClause());
