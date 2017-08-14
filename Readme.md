@@ -1,6 +1,7 @@
 ### Apa ini ?
 Pustaka untuk layanan backend dari [nowdb.net](http://nowdb.net)
 
+[![](https://jitpack.io/v/JajanJawa/jNowDB.svg)](https://jitpack.io/#JajanJawa/jNowDB)
 
 ### Gradle
 tambahkan pada `build.gradle`

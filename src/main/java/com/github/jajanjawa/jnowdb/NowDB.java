@@ -27,47 +27,18 @@ import okhttp3.FormBody.Builder;
 
 public class NowDB {
 
-	public static final class Builder {
-
-		private NowDBConfig config;
-		private Gson gson;
-		private OkHttpClient httpClient;
-
-		public NowDB build() {
-			if (config == null) {
-				config = new NowDBConfig();
-			}
-			if (gson == null) {
-				gson = new GsonBuilder().setPrettyPrinting().create();
-			}
-			if (httpClient == null) {
-				httpClient = new OkHttpClient.Builder().connectTimeout(15L, TimeUnit.SECONDS)
-						.readTimeout(30L, TimeUnit.SECONDS).writeTimeout(15L, TimeUnit.SECONDS).build();
-			}
-
-			NowDB nowDB = new NowDB(config, httpClient, gson);
-			return nowDB;
-		}
-
-		public Builder client(OkHttpClient client) {
-			httpClient = client;
-			return this;
-		}
-
-		public Builder config(NowDBConfig config) {
-			this.config = config;
-			return this;
-		}
-
-		public Builder gson(Gson gson) {
-			this.gson = gson;
-			return this;
-		}
-	}
-
 	private static Gson gson;
-
 	private static OkHttpClient httpClient;
+	private NowDBConfig config;
+	private ObjectMapper mapper;
+
+	private NowDB(NowDBConfig config, OkHttpClient httpClient, Gson gson) {
+		this.config = config;
+		NowDB.httpClient = httpClient;
+		NowDB.gson = gson;
+
+		mapper = new ObjectMapper(gson);
+	}
 
 	public static Gson getGson() {
 		return gson;
@@ -82,21 +53,9 @@ public class NowDB {
 	 *
 	 * @return request builder baru.
 	 */
-	public static Request.Builder requestBuilder() {
+	static Request.Builder requestBuilder() {
 		CacheControl cacheControl = new CacheControl.Builder().noCache().build();
 		return new Request.Builder().cacheControl(cacheControl);
-	}
-
-	private NowDBConfig config;
-
-	private ObjectMapper mapper;
-
-	private NowDB(NowDBConfig config, OkHttpClient httpClient, Gson gson) {
-		this.config = config;
-		NowDB.httpClient = httpClient;
-		NowDB.gson = gson;
-
-		mapper = new ObjectMapper(gson);
 	}
 
 	/**
@@ -104,7 +63,7 @@ public class NowDB {
 	 * .
 	 *
 	 * @param data
-	 * @return
+	 * @return FormBody
 	 */
 	private FormBody buildFormBody(NowDBCollection data) {
 		FormBody.Builder builder = new FormBody.Builder();
@@ -139,7 +98,7 @@ public class NowDB {
 
 	/**
 	 * Hapus semua data pada koleksi ini.
-	 * 
+	 *
 	 * @param collection
 	 * @return
 	 */
@@ -165,7 +124,7 @@ public class NowDB {
 
 	/**
 	 * Mendapatkan data.
-	 * 
+	 *
 	 * @param query
 	 * @return
 	 */
@@ -177,7 +136,7 @@ public class NowDB {
 
 	/**
 	 * Mendapatkan beberapa entry dalam koleksi.
-	 * 
+	 *
 	 * @param collection
 	 * @param offset
 	 * @param limit
@@ -191,7 +150,7 @@ public class NowDB {
 
 	/**
 	 * Mendapatkan koleksi.
-	 * 
+	 *
 	 * @param collection
 	 * @param id
 	 * @return
@@ -205,6 +164,11 @@ public class NowDB {
 
 	public NowDBConfig getConfig() {
 		return config;
+	}
+
+	public NowDB setConfig(NowDBConfig config) {
+		this.config = config;
+		return this;
 	}
 
 	/**
@@ -356,11 +320,6 @@ public class NowDB {
 		return this;
 	}
 
-	public NowDB setConfig(NowDBConfig config) {
-		this.config = config;
-		return this;
-	}
-
 	public NowDB setProject(String project) {
 		config.project = project;
 		return this;
@@ -369,6 +328,44 @@ public class NowDB {
 	public NowDB setToken(String token) {
 		config.token = token;
 		return this;
+	}
+
+	public static final class Builder {
+
+		private NowDBConfig config;
+		private Gson gson;
+		private OkHttpClient httpClient;
+
+		public NowDB build() {
+			if (config == null) {
+				config = new NowDBConfig();
+			}
+			if (gson == null) {
+				gson = new GsonBuilder().setPrettyPrinting().create();
+			}
+			if (httpClient == null) {
+				httpClient = new OkHttpClient.Builder().connectTimeout(15L, TimeUnit.SECONDS)
+						.readTimeout(30L, TimeUnit.SECONDS).writeTimeout(15L, TimeUnit.SECONDS).build();
+			}
+
+			NowDB nowDB = new NowDB(config, httpClient, gson);
+			return nowDB;
+		}
+
+		public Builder client(OkHttpClient client) {
+			httpClient = client;
+			return this;
+		}
+
+		public Builder config(NowDBConfig config) {
+			this.config = config;
+			return this;
+		}
+
+		public Builder gson(Gson gson) {
+			this.gson = gson;
+			return this;
+		}
 	}
 
 }

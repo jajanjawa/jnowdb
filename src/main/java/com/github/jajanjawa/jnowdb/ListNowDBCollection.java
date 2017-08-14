@@ -6,7 +6,7 @@ import java.util.List;
 
 public class ListNowDBCollection<Response> implements ParameterizedType {
 
-    private Class<?> clazz;
+    private Class<Response> clazz;
 
     public ListNowDBCollection(Class<Response> clazz) {
 	this.clazz = clazz;
