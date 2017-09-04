@@ -1,5 +1,7 @@
 package com.github.jajanjawa.jnowdb;
 
+import okhttp3.HttpUrl;
+
 import static com.github.jajanjawa.jnowdb.NowDBProperty.APP_ID;
 import static com.github.jajanjawa.jnowdb.NowDBProperty.COLLECTION;
 import static com.github.jajanjawa.jnowdb.NowDBProperty.ID;
@@ -18,14 +20,19 @@ public class NowDBURIBuilder {
 
 	public static final String SERVICE_URL = "http://io.nowdb.net/v2/";
 	public static final String SERVICE_URL_V1 = "http://io.nowdb.net/operation/";
-
-	private StringBuilder builder;
-	private StringBuilder fullUrl;
+	private final HttpUrl.Builder urlBuilder;
 
 	public NowDBURIBuilder() {
-		builder = new StringBuilder();
-		fullUrl = new StringBuilder();
+		this(SERVICE_URL);
 	}
+
+	public NowDBURIBuilder(String baseUrl) {
+        urlBuilder = HttpUrl.parse(baseUrl).newBuilder();
+    }
+
+	public static NowDBURIBuilder useV1() {
+	    return new NowDBURIBuilder(SERVICE_URL_V1);
+    }
 
 	/**
 	 *
@@ -33,16 +40,13 @@ public class NowDBURIBuilder {
 	 * @return
 	 */
 	public NowDBURIBuilder append(String path) {
-		fullUrl.append(path);
+		urlBuilder.addEncodedPathSegment(path);
 		return this;
 	}
 
 	public NowDBURIBuilder append(String name, Object value) {
-		builder.append(name).append('/');
-		builder.append(value).append('/');
-
-		fullUrl.append(builder);
-		builder.setLength(0);
+		urlBuilder.addEncodedPathSegment(name);
+		urlBuilder.addEncodedPathSegment(value.toString());
 		return this;
 	}
 
@@ -54,7 +58,8 @@ public class NowDBURIBuilder {
 	 * @return
 	 */
 	public String build() {
-		return fullUrl.toString();
+//        return fullUrl.toString();
+        return urlBuilder.build().toString();
 	}
 
 	/**
@@ -85,7 +90,7 @@ public class NowDBURIBuilder {
 	}
 
 	public NowDBURIBuilder operation(Operation operation) {
-		fullUrl.append(operation);
+		urlBuilder.addEncodedPathSegment(operation.toString());
 		return this;
 	}
 
@@ -99,17 +104,7 @@ public class NowDBURIBuilder {
 		return append(PROJECT, project);
 	}
 
-	/**
-	 * Server url
-	 * 
-	 * @return
-	 */
-	public NowDBURIBuilder serviceURL() {
-		fullUrl.append(SERVICE_URL);
-		return this;
-	}
-
-	public NowDBURIBuilder token(String token) {
+    public NowDBURIBuilder token(String token) {
 		return append(TOKEN, token);
 	}
 }

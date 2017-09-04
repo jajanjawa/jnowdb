@@ -18,7 +18,7 @@ public class NowDBURIBuilderTest {
 
 	@Test
 	public void testBuild() {
-		String url = new NowDBURIBuilder().serviceURL().operation(REMOVE_ID).token("ini.token").project("ini.proyek")
+		String url = new NowDBURIBuilder().operation(REMOVE_ID).token("ini.token").project("ini.proyek")
 				.collection("online").appId("ini.appid").id("id.test").build();
 
 		logger.info(url);

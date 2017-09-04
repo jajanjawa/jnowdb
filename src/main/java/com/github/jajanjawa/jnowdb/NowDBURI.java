@@ -18,7 +18,7 @@ public class NowDBURI {
 		String[] keys = operation.keys();
 		ClauseBuilder whereClause = query.getWhereClause();
 		
-		String url = new NowDBURIBuilder().serviceURL().operation(operation).token(config.token)
+		String url = new NowDBURIBuilder().operation(operation).token(config.token)
 				.project(config.project).collection(query.getCollection()).appId(config.appId)
 				.append(keys[0], whereClause.getNameClause()).append(keys[1], whereClause.getValueClause()).build();
 
@@ -26,13 +26,13 @@ public class NowDBURI {
 	}
 
 	public static String removeAll(String collection, NowDBConfig config) {
-		String url = new NowDBURIBuilder().serviceURL().operation(REMOVE_ALL).token(config.token)
+		String url = new NowDBURIBuilder().operation(REMOVE_ALL).token(config.token)
 				.project(config.project).collection(collection).appId(config.appId).build();
 		return url;
 	}
 
 	public static String removeId(String id, String collection, NowDBConfig config) {
-		String url = new NowDBURIBuilder().serviceURL().operation(REMOVE_ID).token(config.token).project(config.project)
+		String url = new NowDBURIBuilder().operation(REMOVE_ID).token(config.token).project(config.project)
 				.collection(collection).appId(config.appId).id(id).build();
 		return url;
 	}
@@ -46,7 +46,7 @@ public class NowDBURI {
 	 * @return
 	 */
 	public static String selectAll(String collection, Integer offset, Integer limit, NowDBConfig config) {
-		String url = new NowDBURIBuilder().serviceURL().operation(SELECT_ALL).token(config.token)
+		String url = new NowDBURIBuilder().operation(SELECT_ALL).token(config.token)
 				.project(config.project).collection(collection).appId(config.appId).limit(limit).offset(offset).build();
 		return url;
 	}
@@ -63,7 +63,7 @@ public class NowDBURI {
 		String[] keys = operation.keys();
 		ClauseBuilder where = query.getWhereClause();
 
-		String url = new NowDBURIBuilder().serviceURL().operation(operation).token(config.token).project(config.project)
+		String url = new NowDBURIBuilder().operation(operation).token(config.token).project(config.project)
 				.collection(query.getCollection()).appId(config.appId).append(keys[0], where.getNameClause())
 				.append(keys[1], where.getValueClause()).limit(query.getLimit()).offset(query.getOffset())
 				.build();
@@ -71,7 +71,7 @@ public class NowDBURI {
 	}
 
 	public static String selectId(String collection, String id, NowDBConfig config) {
-		String url = new NowDBURIBuilder().serviceURL().operation(SELECT_ID).token(config.token).project(config.project)
+		String url = new NowDBURIBuilder().operation(SELECT_ID).token(config.token).project(config.project)
 				.collection(collection).appId(config.appId).id(id).build();
 		return url;
 	}
