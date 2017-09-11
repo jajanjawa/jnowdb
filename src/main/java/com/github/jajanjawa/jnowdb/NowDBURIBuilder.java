@@ -34,11 +34,6 @@ public class NowDBURIBuilder {
 	    return new NowDBURIBuilder(SERVICE_URL_V1);
     }
 
-	/**
-	 *
-	 * @param path
-	 * @return
-	 */
 	public NowDBURIBuilder append(String path) {
 		urlBuilder.addEncodedPathSegment(path);
 		return this;
@@ -54,29 +49,14 @@ public class NowDBURIBuilder {
 		return append(APP_ID, appId);
 	}
 
-	/**
-	 * @return
-	 */
 	public String build() {
-//        return fullUrl.toString();
         return urlBuilder.build().toString();
 	}
 
-	/**
-	 * Panggil {@link #project(String)} dahulu.
-	 *
-	 * @param collection
-	 * @return
-	 */
 	public NowDBURIBuilder collection(String collection) {
 		return append(COLLECTION, collection);
 	}
 
-	/**
-	 *
-	 * @param id
-	 * @return
-	 */
 	public NowDBURIBuilder id(String id) {
 		return append(ID, id);
 	}
@@ -94,12 +74,6 @@ public class NowDBURIBuilder {
 		return this;
 	}
 
-	/**
-	 * Panggil {@link #token(String)} dahulu.
-	 *
-	 * @param project
-	 * @return
-	 */
 	public NowDBURIBuilder project(String project) {
 		return append(PROJECT, project);
 	}
