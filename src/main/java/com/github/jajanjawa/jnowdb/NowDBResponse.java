@@ -1,12 +1,13 @@
 package com.github.jajanjawa.jnowdb;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
+import com.google.gson.reflect.TypeToken;
 import okhttp3.Response;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class NowDBResponse {
 
@@ -32,17 +33,17 @@ public class NowDBResponse {
      * @return instance dari class yang di inginkan.
      * @throws IOException
      */
-    public <T> T as(Class<T> clazz) throws IOException {
+    public <T> T as(Class<T> clazz) {
         return list(json, clazz).get(0);
     }
 
-    public <T> List<T> list(Class<T> clazz) throws IOException {
+    public <T> List<T> list(Class<T> clazz) {
         return list(json, clazz);
     }
 
     protected <T> List<T> list(String json, Class<T> listOfT) {
-        ListNowDBCollection<T> collection = new ListNowDBCollection<T>(listOfT);
-        return NowDB.getGson().fromJson(json, collection);
+        Type type = TypeToken.getParameterized(List.class, listOfT).getType();
+        return NowDB.getGson().fromJson(json, type);
     }
 
     /**
@@ -70,7 +71,7 @@ public class NowDBResponse {
         return total.getAsInt();
     }
 
-    public Status status() throws IOException {
+    public Status status() {
         return NowDB.getGson().fromJson(json, Status.class);
     }
 
