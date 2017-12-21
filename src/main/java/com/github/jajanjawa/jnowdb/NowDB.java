@@ -74,8 +74,8 @@ public class NowDB {
      * Konversi {@link NowDBCollection} menjadi Map. setelan token, project dan
      * app id ditambahkan ke dalam map.
      *
-     * @param src
-     * @return
+     * @param src koleksi
+     * @return map
      * @see #getConfig()
      */
     public Map<String, Object> convert(NowDBCollection src) {
@@ -97,7 +97,7 @@ public class NowDB {
     /**
      * Hapus semua data pada koleksi ini.
      *
-     * @param collection
+     * @param collection nama koleksi
      * @return
      */
     public NowDBCall delete(String collection) {
